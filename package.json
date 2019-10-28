@@ -1,0 +1,99 @@
+{
+		"main": "index.html",
+		"name": "bible",
+		"description": "Bible catholique — multilingue",
+		"version": "0.1.0",
+		"auto-updater":{
+			"repo":"/yb85/bible",
+			"branch":"master"
+		},
+		"keywords": [
+				"bible",
+				"catholique",
+				"NT",
+				"LXX",
+				"WLC"
+		],
+		"chromium-args": "--allow-file-access-from-files --allow-file-access --user-data-dir",
+		"window": {
+				"title": "Bible",
+				"icon": "icons/icon.png",
+				"toolbar": false,
+				"frame": true,
+				"width": 1024,
+				"height": 760,
+				"position": "center",
+				"min_width": 400,
+				"min_height": 200
+		},
+		"scripts": {
+				"start": "nw ./",
+				"test": "echo \"Error: no test specified\" && exit 1",
+				"build": "build --tasks win-x86,win-x64,linux-x86,linux-x64,mac-x64 --mirror https://dl.nwjs.io/ .",
+				"build-osx": "build --tasks mac-x64 --mirror https://dl.nwjs.io/ .",
+				"dist": "npm run-script build && npm run-script bundle-dmg && npm run-script bundle-linux;",
+				"bundle-linux": "for i in ./dist/*linux*/ ; do i=\"${i%/}\"; tar -C \"$i\" -cvjf \"$i.tar.bz2\" \"./\";done",
+				"bundle-dmg": "create-dmg \"`find ./dist -iname '*.app' -print -quit`\" ./dist",
+				"bundle-chrome": "./chrome-app/bundle.sh"
+		},
+		"author": "Yann Barbotin",
+		"license": "CC NC-SA 4.0",
+		"build": {
+				"appId": "com.netlify.yann.bible",
+				"nwVersion": "0.41.2",
+				"nwFlavor": "normal",
+				"files": [
+						"css/**/*",
+						"js/**/*",
+						"*.html"
+				],
+				"excludes": [
+						"**/*bak",
+						"**/.*"
+				],
+				"packed": false,
+				"strippedProperties": [
+						"build"
+				],
+				"targets": [
+						"nsis7z"
+				],
+				"outputPattern": "${NAME} ${VERSION} ${PLATFORM} ${ARCH}",
+				"win": {
+						"productName": "Bible",
+						"companyName": "yb",
+						"copyright": "CC NC-SA 4.0",
+						"icon": "./icons/icon.ico"
+				},
+				"mac": {
+						"displayName": "Bible",
+						"copyright": "CC NC-SA 4.0",
+						"icon": "./icons/icon.icns",
+						"plistStrings": {
+								"CFBundleIdentifier": "com.netlify.yann.bible",
+								"CFBundleDocumentTypes": []
+						}
+				},
+				"nsis": {
+						"installDirectory": "$LOCALAPPDATA\\${_APPNAME}",
+						"diffUpdaters": true,
+						"oneClick": false,
+						"allowElevation": true,
+						"warningsAsErrors": true,
+						"icon": "./icons/icon-nsis.ico"
+				}
+		},
+		"devDependencies": {
+				"create-dmg": "^4.1.0",
+				"grunt-package-minifier": "^0.2.1",
+				"nwjs-builder-phoenix": "^1.15.0",
+				"typescript": "^2.2.1"
+		},
+		"dependencies": {
+				"expressionparser": "0.0.1",
+				"logical-expression-parser": "^1.0.0",
+				"nw": "^0.41.3",
+				"nw-autoupdater": "^1.1.10",
+				"simple-math-ast": "^1.0.0"
+		}
+}
